@@ -25,6 +25,8 @@ export interface Certificate {
 export interface ProfileData {
   name: string;
   title: string;
+  tagline?: string;
+  cvUrl?: string;
   location: string;
   email: string;
   linkedIn: string;
