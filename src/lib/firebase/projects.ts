@@ -1,8 +1,6 @@
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
-import app from "@/lib/firebase/config";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { Project } from "@/types/project";
-
-const db = getFirestore(app);
 
 function isStringArray(value: unknown): boolean {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
