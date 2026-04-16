@@ -2,7 +2,10 @@ import { ProfileData } from "@/types/profile";
 
 export const profileData: ProfileData = {
   name: "Itumeleng Phalafala",
-  title: "Quality Assurance Engineer",
+  title: "QA Engineer & Developer",
+  tagline:
+    "Building reliable, high-quality software through test automation, CI/CD, and modern development practices.",
+  cvUrl: "/Itumeleng_Phalafala_CV.pdf",
   location: "Johannesburg, South Africa",
   email: "ituphala@gmail.com",
   linkedIn: "https://www.linkedin.com/in/itumeleng-phalafala",

@@ -1,54 +1,75 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { profileData } from "@/constants/profile";
 
+const FALLBACK_TAGLINE = "Passionate about building reliable, high-quality software.";
+
 export default function Hero() {
+  const prefersReducedMotion = useReducedMotion();
+
+  const animationProps = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 30 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6 },
+      };
+
+  const scrollIndicatorProps = prefersReducedMotion
+    ? {}
+    : {
+        animate: { y: [0, 10, 0] },
+        transition: { repeat: Infinity, duration: 2 },
+      };
+
+  const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const target = document.getElementById("projects");
+    if (target) {
+      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+    }
+  };
+
   return (
     <section
       id="hero"
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary/90 to-secondary text-white pt-16"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <motion.div {...animationProps}>
           <p className="text-accent font-medium text-lg mb-4 tracking-wider uppercase">
             Hello, I&apos;m
           </p>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-heading mb-6">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-heading mb-6 break-words">
             {profileData.name}
           </h1>
-          <p className="text-xl sm:text-2xl text-gray-200 mb-8">
+          <p className="text-xl sm:text-2xl text-gray-200 mb-4">
             {profileData.title}
           </p>
           <p className="text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-            {profileData.summary}
+            {profileData.tagline || FALLBACK_TAGLINE}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="#contact"
+              href="#projects"
+              onClick={handleScrollToProjects}
               className="bg-accent text-foreground font-semibold px-8 py-3 rounded-lg hover:bg-accent/90 transition-colors"
             >
-              Get In Touch
+              View My Work
             </a>
             <a
-              href="#experience"
+              href={profileData.cvUrl || "/cv.pdf"}
+              download
               className="border-2 border-white/30 text-white font-semibold px-8 py-3 rounded-lg hover:border-white/60 transition-colors"
             >
-              View Experience
+              Download CV
             </a>
           </div>
         </motion.div>
 
         {/* Scroll indicator */}
-        <motion.div
-          className="mt-16"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
+        <motion.div className="mt-16" {...scrollIndicatorProps}>
           <svg
             className="h-8 w-8 mx-auto text-gray-300"
             fill="none"
