@@ -7,6 +7,7 @@ import Timeline from "@/components/sections/Timeline";
 import Education from "@/components/sections/Education";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
+import QualityMindset from "@/components/sections/QualityMindset";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <Hero />
         <About />
         <Skills />
+        <QualityMindset />
         <Timeline />
         <Education />
         <Projects />
