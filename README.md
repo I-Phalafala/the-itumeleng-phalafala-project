@@ -42,10 +42,34 @@ The project uses the `@/` path alias (configured in `tsconfig.json`) which maps 
 
 The `(public)` and `(admin)` directories inside `app/` are [Next.js route groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups). The parentheses keep them out of the URL path while allowing separate layouts for public-facing and admin pages.
 
+## 🔐 Environment Variables
+
+This project requires Firebase configuration via environment variables. All client-side variables use the `NEXT_PUBLIC_` prefix so they are accessible in browser-side code.
+
+1. Copy the example file:
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Fill in your Firebase project values in `.env.local`:
+
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase API key |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Firebase auth domain (e.g. `project.firebaseapp.com`) |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase project ID |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Firebase storage bucket (e.g. `project.appspot.com`) |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Firebase Cloud Messaging sender ID |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | Firebase app ID |
+
+> **Note:** `.env.local` is listed in `.gitignore` and must never be committed. Use `.env.example` as a reference for required keys.
+
+If any required variable is missing, the app will log a descriptive error at startup.
+
 ## 🚀 Getting Started
 
 ```bash
 npm install
+cp .env.example .env.local  # then fill in your Firebase values
 npm run dev
 ```
 
