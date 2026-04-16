@@ -1,17 +1,29 @@
+import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Skills from "@/components/sections/Skills";
+import Timeline from "@/components/sections/Timeline";
+import Education from "@/components/sections/Education";
+import Projects from "@/components/sections/Projects";
+import Contact from "@/components/sections/Contact";
+import QualityMindset from "@/components/sections/QualityMindset";
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground flex items-center justify-center">
-      <div className="text-center space-y-6">
-        <h1 className="text-4xl font-bold font-heading text-primary">
-          Welcome
-        </h1>
-        <p className="text-lg text-secondary">
-          Portfolio of Itumeleng Phalafala
-        </p>
-        <div className="bg-primary text-white px-6 py-3 rounded-lg inline-block">
-          Tailwind CSS Configured
-        </div>
-      </div>
-    </main>
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <QualityMindset />
+        <Timeline />
+        <Education />
+        <Projects />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }
