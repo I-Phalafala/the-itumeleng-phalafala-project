@@ -73,11 +73,24 @@ export default function ProjectDetailPage() {
     return null;
   }
 
-  let sectionDelay = 0.1;
-  const nextDelay = () => {
-    sectionDelay += 0.1;
-    return sectionDelay;
-  };
+  // Compute staggered delays for visible sections based on their render order
+  const BASE_DELAY = 0.3;
+  const DELAY_STEP = 0.1;
+  const visibleSections = [
+    project.problemStatement,
+    project.solution,
+    project.techStack && project.techStack.length > 0,
+    project.role,
+    project.testingApproach,
+    project.screenshots && project.screenshots.length > 0,
+  ];
+  const sectionDelays: number[] = [];
+  let idx = 0;
+  for (const section of visibleSections) {
+    sectionDelays.push(section ? BASE_DELAY + idx * DELAY_STEP : 0);
+    if (section) idx++;
+  }
+  const footerDelay = BASE_DELAY + idx * DELAY_STEP;
 
   return (
     <motion.main
@@ -193,13 +206,13 @@ export default function ProjectDetailPage() {
         </motion.p>
 
         {project.problemStatement && (
-          <DetailSection title="Problem Statement" delay={nextDelay()}>
+          <DetailSection title="Problem Statement" delay={sectionDelays[0]}>
             <p>{project.problemStatement}</p>
           </DetailSection>
         )}
 
         {project.solution && (
-          <DetailSection title="Solution" delay={nextDelay()}>
+          <DetailSection title="Solution" delay={sectionDelays[1]}>
             <p className="whitespace-pre-line break-words">
               {project.solution}
             </p>
@@ -207,7 +220,7 @@ export default function ProjectDetailPage() {
         )}
 
         {project.techStack && project.techStack.length > 0 && (
-          <DetailSection title="Tech Stack" delay={nextDelay()}>
+          <DetailSection title="Tech Stack" delay={sectionDelays[2]}>
             <div className="flex flex-wrap gap-2">
               {project.techStack.map((tech) => (
                 <span
@@ -222,13 +235,13 @@ export default function ProjectDetailPage() {
         )}
 
         {project.role && (
-          <DetailSection title="My Role" delay={nextDelay()}>
+          <DetailSection title="My Role" delay={sectionDelays[3]}>
             <p>{project.role}</p>
           </DetailSection>
         )}
 
         {project.testingApproach && (
-          <DetailSection title="Testing Approach" delay={nextDelay()}>
+          <DetailSection title="Testing Approach" delay={sectionDelays[4]}>
             <p>{project.testingApproach}</p>
           </DetailSection>
         )}
@@ -238,7 +251,7 @@ export default function ProjectDetailPage() {
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            transition={{ duration: 0.5, delay: nextDelay() }}
+            transition={{ duration: 0.5, delay: sectionDelays[5] }}
             className="mb-10"
           >
             <h2 className="text-xl sm:text-2xl font-bold font-heading text-primary mb-3">
@@ -266,7 +279,7 @@ export default function ProjectDetailPage() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          transition={{ duration: 0.4, delay: nextDelay() }}
+          transition={{ duration: 0.4, delay: footerDelay }}
           className="pt-6 border-t border-gray-200"
         >
           <Link
