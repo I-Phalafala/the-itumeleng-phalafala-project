@@ -1,8 +1,6 @@
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import app from "@/lib/firebase/config";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { Skill } from "@/types/skill";
-
-const db = getFirestore(app);
 
 function isValidSkill(data: Record<string, unknown>): boolean {
   return (

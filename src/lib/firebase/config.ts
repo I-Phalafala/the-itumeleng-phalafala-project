@@ -1,4 +1,7 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 const requiredEnvVars = [
   "NEXT_PUBLIC_FIREBASE_API_KEY",
@@ -36,4 +39,10 @@ if (getApps().length) {
   app = initializeApp(firebaseConfig);
 }
 
+// Export singleton service instances
+const db: Firestore = getFirestore(app);
+const auth: Auth = getAuth(app);
+const storage: FirebaseStorage = getStorage(app);
+
+export { db, auth, storage };
 export default app;
