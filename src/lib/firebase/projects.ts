@@ -4,12 +4,18 @@ import { Project } from "@/types/project";
 
 const db = getFirestore(app);
 
+function isStringArray(value: unknown): boolean {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
 function isValidProject(data: Record<string, unknown>): boolean {
   return (
     typeof data.title === "string" &&
     typeof data.slug === "string" &&
     typeof data.description === "string" &&
-    Array.isArray(data.tags)
+    isStringArray(data.tags) &&
+    (data.techStack === undefined || isStringArray(data.techStack)) &&
+    (data.screenshots === undefined || isStringArray(data.screenshots))
   );
 }
 

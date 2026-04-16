@@ -151,6 +151,7 @@ export default function ProjectDetailPage() {
             className="w-full h-64 sm:h-80 rounded-xl bg-gray-200 flex items-center justify-center mb-8"
           >
             <svg
+              data-testid="thumbnail-placeholder"
               className="h-16 w-16 text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
