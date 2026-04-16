@@ -54,11 +54,11 @@ describe("ProjectCard", () => {
       ...baseProject,
       thumbnailUrl: undefined,
     };
-    const { container } = render(<ProjectCard project={noImageProject} />);
+    render(<ProjectCard project={noImageProject} />);
 
-    expect(container.querySelector("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
     // Placeholder SVG should be rendered
-    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByTestId("thumbnail-placeholder")).toBeInTheDocument();
   });
 
   it("truncates long titles without overflow", () => {

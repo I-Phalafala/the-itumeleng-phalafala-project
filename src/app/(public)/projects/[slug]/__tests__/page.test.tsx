@@ -247,7 +247,7 @@ describe("ProjectDetailPage", () => {
     };
     mockedGetProjectBySlug.mockResolvedValue(noThumbProject);
 
-    const { container } = render(<ProjectDetailPage />);
+    render(<ProjectDetailPage />);
 
     await waitFor(() => {
       expect(screen.getByText("Test Project")).toBeInTheDocument();
@@ -256,7 +256,7 @@ describe("ProjectDetailPage", () => {
     // Thumbnail img should not exist (only screenshots)
     expect(screen.queryByAltText("Test Project")).not.toBeInTheDocument();
     // Placeholder SVG should be rendered
-    expect(container.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByTestId("thumbnail-placeholder")).toBeInTheDocument();
   });
 
   it("hides optional sections when data is not provided", async () => {

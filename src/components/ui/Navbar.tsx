@@ -42,6 +42,8 @@ export default function Navbar() {
             className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-nav-menu"
           >
             <svg
               className="h-6 w-6"
@@ -70,7 +72,7 @@ export default function Navbar() {
 
         {/* Mobile navigation */}
         {isOpen && (
-          <div className="md:hidden pb-4 space-y-2">
+          <div id="mobile-nav-menu" className="md:hidden pb-4 space-y-2">
             {navLinks.map((link) => (
               <a
                 key={link.href}

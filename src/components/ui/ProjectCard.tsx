@@ -30,6 +30,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
             <svg
+              data-testid="thumbnail-placeholder"
               className="h-12 w-12"
               fill="none"
               viewBox="0 0 24 24"

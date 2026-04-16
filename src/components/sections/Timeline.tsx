@@ -8,8 +8,12 @@ import SkillBadge from "@/components/ui/SkillBadge";
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "Present";
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 function formatPeriod(startDate: string, endDate: string | null): string {
