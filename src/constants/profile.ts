@@ -9,6 +9,7 @@ export const profileData: ProfileData = {
   location: "Johannesburg, South Africa",
   email: "ituphala@gmail.com",
   linkedIn: "https://www.linkedin.com/in/itumeleng-phalafala",
+  github: "https://github.com/I-Phalafala",
   summary:
     "Quality Assurance Engineer with 6+ years of experience across software development and quality engineering, specialising in manual and automated testing for web, mobile, and API-driven systems. Strong technical background with hands-on experience in test automation, CI/CD pipelines, and debugging complex systems. Comfortable working in fast-paced, enterprise and product-driven environments, collaborating closely with developers, product owners, and stakeholders to ensure high-quality, reliable software delivery.",
   coreCompetencies: [

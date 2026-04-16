@@ -30,6 +30,7 @@ export interface ProfileData {
   location: string;
   email: string;
   linkedIn: string;
+  github: string;
   summary: string;
   coreCompetencies: string[];
   languages: string[];
