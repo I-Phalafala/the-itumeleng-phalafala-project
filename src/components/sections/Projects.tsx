@@ -13,7 +13,10 @@ export default function Projects() {
   useEffect(() => {
     getProjects()
       .then(setProjects)
-      .catch(() => setProjects([]))
+      .catch((error) => {
+        console.error("Failed to fetch projects:", error);
+        setProjects([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 

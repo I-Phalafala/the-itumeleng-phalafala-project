@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getProjects } from "@/lib/firebase/projects";
+import { getProjectBySlug } from "@/lib/firebase/projects";
 import { Project } from "@/types/project";
 
 export default function ProjectDetailPage() {
@@ -13,11 +13,8 @@ export default function ProjectDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProjects()
-      .then((projects) => {
-        const match = projects.find((p) => p.slug === slug) ?? null;
-        setProject(match);
-      })
+    getProjectBySlug(slug)
+      .then(setProject)
       .catch(() => setProject(null))
       .finally(() => setLoading(false));
   }, [slug]);
