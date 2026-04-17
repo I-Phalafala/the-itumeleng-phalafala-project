@@ -175,6 +175,8 @@ describe("skills service", () => {
 
   describe("updateSkill", () => {
     it("returns success on update", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mockedGetDoc.mockResolvedValue({ exists: () => true } as any);
       mockedUpdateDoc.mockResolvedValue(undefined);
 
       const result = await updateSkill("s1", { name: "Updated Skill" });
@@ -182,14 +184,26 @@ describe("skills service", () => {
       expect(result.success).toBe(true);
     });
 
+    it("returns error when document does not exist", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mockedGetDoc.mockResolvedValue({ exists: () => false } as any);
+
+      const result = await updateSkill("nonexistent", { name: "Updated" });
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error).toContain("not found");
+      }
+    });
+
     it("returns error on failure", async () => {
-      mockedUpdateDoc.mockRejectedValue(new Error("Not found"));
+      mockedGetDoc.mockRejectedValue(new Error("Connection error"));
 
       const result = await updateSkill("s1", { name: "Updated" });
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error).toBe("Not found");
+        expect(result.error).toBe("Connection error");
       }
     });
   });
