@@ -103,12 +103,12 @@ describe("ImageUpload component", () => {
     expect(onError).toHaveBeenCalledWith("Invalid file type. Allowed types: JPEG, PNG, WebP");
   });
 
-  it("deletes old image when replacing with a new one", async () => {
-    mockedDeleteImage.mockResolvedValue({ success: true, data: undefined });
+  it("deletes old image after successfully uploading a new one", async () => {
     mockedUploadImage.mockResolvedValue({
       success: true,
       data: "https://firebasestorage.googleapis.com/new-photo.jpg",
     });
+    mockedDeleteImage.mockResolvedValue({ success: true, data: undefined });
 
     render(
       <ImageUpload
@@ -123,13 +123,13 @@ describe("ImageUpload component", () => {
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockedDeleteImage).toHaveBeenCalledWith(
-        "https://firebasestorage.googleapis.com/old-photo.jpg",
+      expect(defaultProps.onUploadComplete).toHaveBeenCalledWith(
+        "https://firebasestorage.googleapis.com/new-photo.jpg",
       );
     });
 
-    expect(defaultProps.onUploadComplete).toHaveBeenCalledWith(
-      "https://firebasestorage.googleapis.com/new-photo.jpg",
+    expect(mockedDeleteImage).toHaveBeenCalledWith(
+      "https://firebasestorage.googleapis.com/old-photo.jpg",
     );
   });
 

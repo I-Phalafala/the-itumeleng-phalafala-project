@@ -14,12 +14,12 @@
  * document shapes defined below.
  */
 
+import { loadEnvConfig } from "@next/env";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
-// Load environment variables in Node.js context
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require("dotenv").config({ path: ".env.local" });
+// Load environment variables in Node.js context using Next's env loader
+loadEnvConfig(process.cwd());
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -148,19 +148,20 @@ async function seed() {
   console.log("🌱 Seeding Firestore collections...\n");
 
   for (const [index, data] of projectsSeed.entries()) {
-    const ref = doc(collection(db, "projects"));
+    const ref = doc(collection(db, "projects"), data.slug);
     await setDoc(ref, data);
     console.log(`  ✅ projects/${ref.id} (${index + 1}/${projectsSeed.length})`);
   }
 
   for (const [index, data] of experienceSeed.entries()) {
-    const ref = doc(collection(db, "experience"));
+    const id = `${data.company.toLowerCase().replace(/\s+/g, "-")}-${data.role.toLowerCase().replace(/\s+/g, "-")}`;
+    const ref = doc(collection(db, "experience"), id);
     await setDoc(ref, data);
     console.log(`  ✅ experience/${ref.id} (${index + 1}/${experienceSeed.length})`);
   }
 
   for (const [index, data] of skillsSeed.entries()) {
-    const ref = doc(collection(db, "skills"));
+    const ref = doc(collection(db, "skills"), data.name.toLowerCase());
     await setDoc(ref, data);
     console.log(`  ✅ skills/${ref.id} (${index + 1}/${skillsSeed.length})`);
   }

@@ -16,6 +16,8 @@ jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({ name: "firestore-instance" })),
   collection: jest.fn(),
   getDocs: jest.fn(),
+  query: jest.fn(),
+  orderBy: jest.fn(),
 }));
 
 jest.mock("firebase/storage", () => ({

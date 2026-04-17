@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { uploadImage, deleteImage } from "@/lib/firebase/services/storage";
 
@@ -27,6 +27,11 @@ export default function ImageUpload({
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Sync preview with currentImageUrl prop when it changes externally
+  useEffect(() => {
+    setPreview(currentImageUrl ?? null);
+  }, [currentImageUrl]);
+
   const handleFileChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -36,26 +41,39 @@ export default function ImageUpload({
       setUploading(true);
       setProgress(0);
 
-      // Delete old image from storage when replacing
-      if (currentImageUrl) {
-        await deleteImage(currentImageUrl);
-      }
+      try {
+        const path = `${storagePath}/${Date.now()}-${file.name}`;
+        const result = await uploadImage(file, path, (p) => setProgress(p));
 
-      const path = `${storagePath}/${Date.now()}-${file.name}`;
-      const result = await uploadImage(file, path, (p) => setProgress(p));
+        if (result.success) {
+          setPreview(result.data);
+          onUploadComplete(result.data);
 
-      if (result.success) {
-        setPreview(result.data);
-        onUploadComplete(result.data);
-      } else {
-        setError(result.error);
-        onError?.(result.error);
-      }
-
-      setUploading(false);
-      // Reset file input so the same file can be re-selected
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+          // Delete old image from storage only after the replacement upload succeeds
+          if (currentImageUrl) {
+            try {
+              await deleteImage(currentImageUrl);
+            } catch {
+              const deleteError = "New image uploaded, but deleting the previous image failed.";
+              setError(deleteError);
+              onError?.(deleteError);
+            }
+          }
+        } else {
+          setError(result.error);
+          onError?.(result.error);
+        }
+      } catch (err) {
+        const unexpectedError =
+          err instanceof Error ? err.message : "Image upload failed.";
+        setError(unexpectedError);
+        onError?.(unexpectedError);
+      } finally {
+        setUploading(false);
+        // Reset file input so the same file can be re-selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
       }
     },
     [currentImageUrl, storagePath, onUploadComplete, onError],

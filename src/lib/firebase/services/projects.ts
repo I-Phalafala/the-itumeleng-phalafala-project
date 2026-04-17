@@ -74,13 +74,17 @@ export async function updateProject(
 ): Promise<ServiceResponse<void>> {
   try {
     const docRef = doc(db, COLLECTION, id);
-    const snapshot = await getDoc(docRef);
-    if (!snapshot.exists()) {
-      return { success: false, error: `Project with id "${id}" not found` };
-    }
     await updateDoc(docRef, data);
     return { success: true, data: undefined };
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: string }).code === "not-found"
+    ) {
+      return { success: false, error: `Project with id "${id}" not found` };
+    }
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to update project",

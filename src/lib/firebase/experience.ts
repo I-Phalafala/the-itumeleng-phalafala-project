@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { ExperienceItem } from "@/types/experience";
 
@@ -20,7 +20,8 @@ function isValidExperience(data: Record<string, unknown>): boolean {
 }
 
 export async function getExperience(): Promise<ExperienceItem[]> {
-  const snapshot = await getDocs(collection(db, "experience"));
+  const q = query(collection(db, "experience"), orderBy("order"));
+  const snapshot = await getDocs(q);
   return snapshot.docs
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .filter((doc) => isValidExperience(doc as Record<string, unknown>)) as ExperienceItem[];

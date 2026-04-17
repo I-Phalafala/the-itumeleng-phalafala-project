@@ -176,8 +176,6 @@ describe("projects service", () => {
 
   describe("updateProject", () => {
     it("returns success on update", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mockedGetDoc.mockResolvedValue({ exists: () => true } as any);
       mockedUpdateDoc.mockResolvedValue(undefined);
 
       const result = await updateProject("p1", { title: "Updated" });
@@ -186,8 +184,8 @@ describe("projects service", () => {
     });
 
     it("returns error when document does not exist", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mockedGetDoc.mockResolvedValue({ exists: () => false } as any);
+      const notFoundError = Object.assign(new Error("Document not found"), { code: "not-found" });
+      mockedUpdateDoc.mockRejectedValue(notFoundError);
 
       const result = await updateProject("nonexistent", { title: "Updated" });
 
@@ -198,7 +196,7 @@ describe("projects service", () => {
     });
 
     it("returns error on failure", async () => {
-      mockedGetDoc.mockRejectedValue(new Error("Connection error"));
+      mockedUpdateDoc.mockRejectedValue(new Error("Connection error"));
 
       const result = await updateProject("p1", { title: "Updated" });
 
