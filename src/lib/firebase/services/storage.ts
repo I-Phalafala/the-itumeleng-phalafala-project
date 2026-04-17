@@ -3,6 +3,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
   deleteObject,
+  StorageReference,
 } from "firebase/storage";
 import { storage } from "@/lib/firebase/config";
 import { ServiceResponse } from "./types";
@@ -84,7 +85,7 @@ export async function uploadImage(
  */
 export async function deleteImage(url: string): Promise<ServiceResponse<void>> {
   try {
-    const storageRef = ref(storage, url);
+    const storageRef: StorageReference = ref(storage, url);
     await deleteObject(storageRef);
     return { success: true, data: undefined };
   } catch (error) {

@@ -37,7 +37,7 @@ export default function ImageUpload({
       setProgress(0);
 
       // Delete old image from storage when replacing
-      if (preview && currentImageUrl) {
+      if (currentImageUrl) {
         await deleteImage(currentImageUrl);
       }
 
@@ -58,7 +58,7 @@ export default function ImageUpload({
         fileInputRef.current.value = "";
       }
     },
-    [preview, currentImageUrl, storagePath, onUploadComplete, onError],
+    [currentImageUrl, storagePath, onUploadComplete, onError],
   );
 
   return (
