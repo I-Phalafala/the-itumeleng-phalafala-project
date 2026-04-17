@@ -4,6 +4,7 @@ export interface Project {
   slug: string;
   description: string;
   thumbnailUrl?: string;
+  imageUrl?: string;
   tags: string[];
   problemStatement?: string;
   solution?: string;
@@ -11,4 +12,5 @@ export interface Project {
   role?: string;
   testingApproach?: string;
   screenshots?: string[];
+  order?: number;
 }

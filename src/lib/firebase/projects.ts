@@ -1,8 +1,6 @@
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
-import app from "@/lib/firebase/config";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { Project } from "@/types/project";
-
-const db = getFirestore(app);
 
 function isStringArray(value: unknown): boolean {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
@@ -20,7 +18,8 @@ function isValidProject(data: Record<string, unknown>): boolean {
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const snapshot = await getDocs(collection(db, "projects"));
+  const q = query(collection(db, "projects"), orderBy("order"));
+  const snapshot = await getDocs(q);
   return snapshot.docs
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .filter((doc) => isValidProject(doc as Record<string, unknown>)) as Project[];

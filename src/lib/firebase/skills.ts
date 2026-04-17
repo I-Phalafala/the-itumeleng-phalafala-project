@@ -1,8 +1,6 @@
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import app from "@/lib/firebase/config";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { Skill } from "@/types/skill";
-
-const db = getFirestore(app);
 
 function isValidSkill(data: Record<string, unknown>): boolean {
   return (
@@ -14,7 +12,8 @@ function isValidSkill(data: Record<string, unknown>): boolean {
 }
 
 export async function getSkills(): Promise<Skill[]> {
-  const snapshot = await getDocs(collection(db, "skills"));
+  const q = query(collection(db, "skills"), orderBy("order"));
+  const snapshot = await getDocs(q);
   return snapshot.docs
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .filter((doc) => isValidSkill(doc as Record<string, unknown>)) as Skill[];
