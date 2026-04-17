@@ -31,3 +31,6 @@ export {
   updateSkill,
   deleteSkill,
 } from "./services/skills";
+
+// Storage services
+export { uploadImage, deleteImage } from "./services/storage";
