@@ -26,7 +26,9 @@ function SummaryCard({ title, count, loading, icon }: SummaryCardProps) {
       <div>
         <p className="text-sm font-medium text-gray-500">{title}</p>
         {loading ? (
-          <div className="mt-1 h-7 w-12 animate-pulse rounded bg-gray-200" role="status" aria-label="Loading" />
+          <div className="mt-1 h-7 w-12 animate-pulse rounded bg-gray-200" role="status" aria-label={`Loading ${title} count`}>
+            <span className="sr-only">Loading…</span>
+          </div>
         ) : (
           <p className="text-2xl font-bold text-gray-900" data-testid={`count-${title.toLowerCase().replace(/\s+/g, "-")}`}>
             {count}
@@ -55,7 +57,7 @@ export default function AdminDashboardPage() {
           skills: skillsSnap.size,
         });
       } catch (error) {
-        console.error("Failed to fetch dashboard counts:", error);
+        console.error("Failed to fetch dashboard counts. Please check Firestore permissions and network connectivity.", error);
       } finally {
         setLoading(false);
       }
