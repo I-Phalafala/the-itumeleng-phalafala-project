@@ -8,6 +8,7 @@ export type { ServiceResponse, ServiceSuccess, ServiceError } from "./services/t
 // Project services
 export {
   getProjects,
+  getProjectById,
   getProjectBySlug,
   createProject,
   updateProject,

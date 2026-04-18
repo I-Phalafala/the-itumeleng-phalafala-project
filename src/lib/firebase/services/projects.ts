@@ -34,6 +34,23 @@ export async function getProjects(): Promise<ServiceResponse<Project[]>> {
   }
 }
 
+/** Fetch a single project by its Firestore document ID. Returns `null` data when not found. */
+export async function getProjectById(
+  id: string,
+): Promise<ServiceResponse<Project | null>> {
+  try {
+    const docRef = doc(db, COLLECTION, id);
+    const snapshot = await getDoc(docRef);
+    if (!snapshot.exists()) return { success: true, data: null };
+    return { success: true, data: { id: snapshot.id, ...snapshot.data() } as Project };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to fetch project",
+    };
+  }
+}
+
 /** Fetch a single project by its slug. Returns `null` data when not found. */
 export async function getProjectBySlug(
   slug: string,
