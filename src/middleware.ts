@@ -22,8 +22,9 @@ export function middleware(request: NextRequest) {
 
   if (!session?.value) {
     const loginUrl = new URL("/admin/login", request.url);
-    // Preserve the intended destination so we can redirect after login
-    loginUrl.searchParams.set("redirect", pathname);
+    // Preserve the intended destination (including query string) so we can redirect after login
+    const search = request.nextUrl.search;
+    loginUrl.searchParams.set("redirect", pathname + search);
     return NextResponse.redirect(loginUrl);
   }
 

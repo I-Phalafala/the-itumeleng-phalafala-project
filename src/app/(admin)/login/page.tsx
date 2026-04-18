@@ -8,6 +8,7 @@ import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { useAuth } from "@/hooks/useAuth";
+import { setSessionCookie } from "@/lib/auth/session";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
@@ -63,7 +64,9 @@ export default function AdminLoginPage() {
     setIsSubmitting(true);
 
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      const credential = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const token = await credential.user.getIdToken();
+      setSessionCookie(token);
       router.push("/admin/dashboard");
     } catch (error: unknown) {
       const firebaseError = error as { code?: string };

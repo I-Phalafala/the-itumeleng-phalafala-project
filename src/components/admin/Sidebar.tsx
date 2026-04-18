@@ -53,9 +53,14 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   async function handleLogout() {
-    await signOut(auth);
-    clearSessionCookie();
-    router.replace("/admin/login");
+    try {
+      await signOut(auth);
+    } catch {
+      // Sign-out failed transiently; proceed with clearing session anyway
+    } finally {
+      clearSessionCookie();
+      router.replace("/admin/login");
+    }
   }
 
   const sidebarContent = (

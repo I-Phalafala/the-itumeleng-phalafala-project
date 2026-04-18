@@ -3,13 +3,14 @@
  */
 import { NextRequest } from "next/server";
 import { middleware } from "@/middleware";
+import { SESSION_COOKIE_NAME } from "@/constants/auth";
 
 // Helper: build a NextRequest pointing at the given pathname
 function makeRequest(pathname: string, sessionCookie?: string): NextRequest {
   const url = `http://localhost${pathname}`;
   const request = new NextRequest(url);
   if (sessionCookie !== undefined) {
-    request.cookies.set("session", sessionCookie);
+    request.cookies.set(SESSION_COOKIE_NAME, sessionCookie);
   }
   return request;
 }
@@ -30,6 +31,14 @@ describe("middleware", () => {
     const response = middleware(makeRequest("/admin/projects"));
     const location = response.headers.get("location") ?? "";
     expect(location).toContain("redirect=%2Fadmin%2Fprojects");
+  });
+
+  it("preserves query string in redirect URL", () => {
+    const request = new NextRequest("http://localhost/admin/projects?page=2&filter=active");
+    const response = middleware(request);
+    const location = response.headers.get("location") ?? "";
+    expect(location).toContain("redirect=");
+    expect(decodeURIComponent(location)).toContain("/admin/projects?page=2&filter=active");
   });
 
   it("allows /admin/login through without a session", () => {

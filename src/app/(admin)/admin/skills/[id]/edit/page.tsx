@@ -45,7 +45,7 @@ export default function EditSkillPage() {
       const result = await updateSkill(id, {
         name: data.name,
         category: data.category,
-        order: data.order ? parseInt(data.order, 10) : undefined,
+        order: data.order ? (isFinite(Number(data.order)) ? Number(data.order) : undefined) : undefined,
       });
 
       if (result.success) {

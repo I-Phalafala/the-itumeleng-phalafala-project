@@ -31,6 +31,12 @@ jest.mock("@/lib/firebase/config", () => ({
   auth: { name: "mock-auth" },
 }));
 
+// Mock session utilities
+const mockSetSessionCookie = jest.fn();
+jest.mock("@/lib/auth/session", () => ({
+  setSessionCookie: (...args: unknown[]) => mockSetSessionCookie(...args),
+}));
+
 // ─── Tests ───────────────────────────────────────────────────
 
 describe("AdminLoginPage", () => {
@@ -79,7 +85,8 @@ describe("AdminLoginPage", () => {
   });
 
   it("redirects to dashboard on successful login", async () => {
-    mockSignIn.mockResolvedValue({ user: { uid: "123" } });
+    const mockGetIdToken = jest.fn().mockResolvedValue("mock-token");
+    mockSignIn.mockResolvedValue({ user: { uid: "123", getIdToken: mockGetIdToken } });
 
     render(<AdminLoginPage />);
 
@@ -93,6 +100,7 @@ describe("AdminLoginPage", () => {
         "admin@example.com",
         "correct-password",
       );
+      expect(mockSetSessionCookie).toHaveBeenCalledWith("mock-token");
       expect(mockPush).toHaveBeenCalledWith("/admin/dashboard");
     });
   });

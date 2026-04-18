@@ -57,7 +57,7 @@ export default function EditProjectPage() {
         testingApproach: data.testingApproach ?? "",
         imageUrl: data.imageUrl ?? "",
         tags: techStackArray,
-        order: data.order ? parseInt(data.order, 10) : 0,
+        order: data.order && isFinite(Number(data.order)) ? Number(data.order) : 0,
       });
 
       if (result.success) {

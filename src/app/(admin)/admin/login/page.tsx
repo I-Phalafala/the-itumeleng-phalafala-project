@@ -34,6 +34,16 @@ export default function AdminLoginPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+
+    if (!email.trim()) {
+      setError("Email is required.");
+      return;
+    }
+    if (!password) {
+      setError("Password is required.");
+      return;
+    }
+
     setLoading(true);
 
     try {

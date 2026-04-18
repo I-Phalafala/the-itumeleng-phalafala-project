@@ -40,6 +40,7 @@ jest.mock("@/lib/firebase/config", () => ({
 import { getDocs, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import {
   getProjects,
+  getProjectById,
   getProjectBySlug,
   createProject,
   updateProject,
@@ -95,6 +96,47 @@ describe("projects service", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error).toBe("Firestore offline");
+      }
+    });
+  });
+
+  describe("getProjectById", () => {
+    it("returns project when found", async () => {
+      mockedGetDoc.mockResolvedValue({
+        exists: () => true,
+        id: "p1",
+        data: () => ({ title: "My Project", slug: "my-project" }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any);
+
+      const result = await getProjectById("p1");
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data).toEqual(expect.objectContaining({ id: "p1", title: "My Project" }));
+      }
+    });
+
+    it("returns null when not found", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mockedGetDoc.mockResolvedValue({ exists: () => false } as any);
+
+      const result = await getProjectById("nonexistent");
+
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data).toBeNull();
+      }
+    });
+
+    it("returns error on failure", async () => {
+      mockedGetDoc.mockRejectedValue(new Error("Connection lost"));
+
+      const result = await getProjectById("p1");
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error).toBe("Connection lost");
       }
     });
   });

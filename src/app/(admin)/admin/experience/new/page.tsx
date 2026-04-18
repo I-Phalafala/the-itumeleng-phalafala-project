@@ -40,7 +40,7 @@ export default function NewExperiencePage() {
         endDate: data.endDate && data.endDate !== "" ? data.endDate : null,
         impact: impactArray,
         techStack: techStackArray,
-        order: data.order ? parseInt(data.order, 10) : 0,
+        order: data.order && isFinite(Number(data.order)) ? Number(data.order) : 0,
       });
 
       if (result.success) {
