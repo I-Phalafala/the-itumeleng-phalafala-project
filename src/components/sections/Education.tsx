@@ -4,31 +4,33 @@ import { motion } from "framer-motion";
 import { profileData } from "@/constants/profile";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Card from "@/components/ui/Card";
+import { staggerContainer, fadeInLeft, fadeInRight } from "@/lib/animations";
 
 export default function Education() {
   const { education, certificates } = profileData;
 
   return (
-    <section id="education" className="py-20 bg-white">
+    <section id="education" className="py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Education & Certifications"
           subtitle="Academic background and professional credentials"
         />
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <motion.div
+          className="grid lg:grid-cols-2 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+        >
           {/* Education */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div variants={fadeInLeft}>
             <Card>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-neonBlue/10 border border-neonBlue/30 rounded-lg flex items-center justify-center">
                   <svg
-                    className="h-5 w-5 text-primary"
+                    className="h-5 w-5 text-neonBlue"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -43,28 +45,28 @@ export default function Education() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold font-heading text-primary">
+                <h3 className="text-xl font-semibold font-heading text-neonBlue">
                   Education
                 </h3>
               </div>
-              <h4 className="text-lg font-medium text-foreground mb-1">
+              <h4 className="text-lg font-medium text-textPrimary mb-1">
                 {education.degree}
               </h4>
-              <p className="text-secondary font-medium mb-1">
+              <p className="text-neonPurple font-medium mb-1">
                 {education.institution}
               </p>
-              <p className="text-sm text-foreground/50 mb-4">
+              <p className="text-sm text-textSecondary mb-4">
                 {education.location} &middot; {education.level}
               </p>
               <div>
-                <p className="text-sm font-medium text-foreground/70 mb-2">
+                <p className="text-sm font-medium text-textSecondary mb-2">
                   Coursework:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {education.coursework.map((course) => (
                     <span
                       key={course}
-                      className="text-xs bg-primary/5 text-primary/80 px-2 py-1 rounded"
+                      className="text-xs bg-neonBlue/5 text-neonBlue/80 border border-neonBlue/20 px-2 py-1 rounded"
                     >
                       {course}
                     </span>
@@ -75,17 +77,12 @@ export default function Education() {
           </motion.div>
 
           {/* Certifications */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <motion.div variants={fadeInRight}>
             <Card>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-neonPink/10 border border-neonPink/30 rounded-lg flex items-center justify-center">
                   <svg
-                    className="h-5 w-5 text-accent"
+                    className="h-5 w-5 text-neonPink"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -98,7 +95,7 @@ export default function Education() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold font-heading text-primary">
+                <h3 className="text-xl font-semibold font-heading text-neonPink">
                   Certifications
                 </h3>
               </div>
@@ -106,23 +103,23 @@ export default function Education() {
                 {certificates.map((cert) => (
                   <div
                     key={cert.name}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200"
                   >
-                    <span className="flex-shrink-0 w-12 text-center text-xs font-bold text-accent bg-accent/10 py-1 rounded">
+                    <span className="flex-shrink-0 w-12 text-center text-xs font-bold text-neonPink bg-neonPink/10 border border-neonPink/20 py-1 rounded">
                       {cert.year}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-sm font-medium text-textPrimary">
                         {cert.name}
                       </p>
-                      <p className="text-xs text-foreground/50">{cert.issuer}</p>
+                      <p className="text-xs text-textSecondary">{cert.issuer}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </Card>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

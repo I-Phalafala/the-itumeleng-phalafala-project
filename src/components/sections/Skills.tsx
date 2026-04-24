@@ -6,6 +6,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import SkillBadge from "@/components/ui/SkillBadge";
 import { getSkills } from "@/lib/firebase/skills";
 import { Skill } from "@/types/skill";
+import { staggerContainer, cardReveal } from "@/lib/animations";
 
 const BADGE_VARIANTS: Array<"primary" | "secondary" | "accent"> = [
   "primary",
@@ -50,7 +51,7 @@ export default function Skills() {
   const categories = Object.keys(grouped);
 
   return (
-    <section id="skills" className="py-20 bg-white">
+    <section id="skills" className="py-20 section-bg-alt">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Technical Expertise"
@@ -58,21 +59,24 @@ export default function Skills() {
         />
 
         {loading ? (
-          <p className="text-center text-foreground/50">Loading skills…</p>
+          <p className="text-center text-textSecondary">Loading skills…</p>
         ) : categories.length === 0 ? (
-          <p className="text-center text-foreground/50">Skills coming soon</p>
+          <p className="text-center text-textSecondary">Skills coming soon</p>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            {categories.map((category) => (
               <motion.div
                 key={category}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="bg-background rounded-xl p-6 border border-gray-100"
+                variants={cardReveal}
+                className="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10 transition-all duration-300 hover:border-neonPurple/30 hover:shadow-[0_0_25px_rgba(139,92,246,0.1)] hover:bg-white/8"
               >
-                <h3 className="text-lg font-semibold font-heading text-primary mb-4">
+                <h3 className="text-lg font-semibold font-heading text-neonPurple mb-4">
                   {category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -86,7 +90,7 @@ export default function Skills() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </section>

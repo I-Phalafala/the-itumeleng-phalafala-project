@@ -4,34 +4,36 @@ import { motion } from "framer-motion";
 import { profileData } from "@/constants/profile";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Card from "@/components/ui/Card";
+import { staggerContainer, fadeInLeft, fadeInRight } from "@/lib/animations";
 
 export default function About() {
   return (
-    <section id="about" className="py-20 bg-background">
+    <section id="about" className="py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="About Me"
           subtitle="A passionate QA Engineer and developer building reliable, high-quality software"
         />
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+        <motion.div
+          className="grid md:grid-cols-2 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <motion.div variants={fadeInLeft}>
             <Card>
-              <h3 className="text-xl font-semibold font-heading text-primary mb-4">
+              <h3 className="text-xl font-semibold font-heading text-neonBlue mb-4">
                 Who I Am
               </h3>
-              <p className="text-foreground/80 leading-relaxed mb-4">
+              <p className="text-textSecondary leading-relaxed mb-4">
                 {profileData.summary}
               </p>
               <div className="flex flex-wrap gap-3 mt-4">
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                <div className="flex items-center gap-2 text-sm text-textSecondary">
                   <svg
-                    className="h-4 w-4 text-accent"
+                    className="h-4 w-4 text-neonPink"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -43,9 +45,9 @@ export default function About() {
                   </svg>
                   {profileData.location}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                <div className="flex items-center gap-2 text-sm text-textSecondary">
                   <svg
-                    className="h-4 w-4 text-accent"
+                    className="h-4 w-4 text-neonPink"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -58,24 +60,19 @@ export default function About() {
             </Card>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <motion.div variants={fadeInRight}>
             <Card>
-              <h3 className="text-xl font-semibold font-heading text-primary mb-4">
+              <h3 className="text-xl font-semibold font-heading text-neonPurple mb-4">
                 Core Competencies
               </h3>
               <ul className="space-y-3">
                 {profileData.coreCompetencies.map((competency) => (
                   <li
                     key={competency}
-                    className="flex items-start gap-3 text-foreground/80"
+                    className="flex items-start gap-3 text-textSecondary"
                   >
                     <svg
-                      className="h-5 w-5 text-accent flex-shrink-0 mt-0.5"
+                      className="h-5 w-5 text-neonBlue flex-shrink-0 mt-0.5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -91,7 +88,7 @@ export default function About() {
               </ul>
             </Card>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

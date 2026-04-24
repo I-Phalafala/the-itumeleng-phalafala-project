@@ -5,6 +5,7 @@ import { ExperienceItem } from "@/types/experience";
 import { experienceData } from "@/constants/experience";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SkillBadge from "@/components/ui/SkillBadge";
+import { timelineCardLeft, timelineCardRight } from "@/lib/animations";
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "Present";
@@ -30,38 +31,42 @@ function TimelineCard({ item, index }: TimelineCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={isLeft ? timelineCardLeft : timelineCardRight}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
       className={`relative mb-12 md:w-1/2 ${
         isLeft ? "md:pr-12 md:ml-0" : "md:pl-12 md:ml-auto"
       }`}
     >
       {/* Timeline dot */}
       <div
-        className={`absolute top-2 w-3 h-3 bg-accent rounded-full border-2 border-white shadow left-[10px] md:left-auto ${
-          isLeft ? "md:right-[-6.5px]" : "md:left-[-6.5px]"
+        className={`absolute top-3 w-4 h-4 rounded-full border-2 border-neonBlue shadow left-[8px] md:left-auto ${
+          isLeft ? "md:right-[-8px]" : "md:left-[-8px]"
         }`}
+        style={{
+          background: "linear-gradient(135deg, #00D9FF, #8B5CF6)",
+          boxShadow: "0 0 10px rgba(0,217,255,0.7), 0 0 20px rgba(0,217,255,0.3)",
+        }}
       />
 
-      <div className="ml-10 md:ml-0 bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow">
-        <div className="flex flex-wrap items-center justify-between mb-2">
-          <h3 className="text-lg font-bold text-primary">{item.role}</h3>
-          <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded-full">
+      <div className="ml-10 md:ml-0 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6 transition-all duration-300 hover:border-neonBlue/30 hover:shadow-[0_0_25px_rgba(0,217,255,0.1)] hover:bg-white/8">
+        <div className="flex flex-wrap items-center justify-between mb-2 gap-2">
+          <h3 className="text-lg font-bold text-textPrimary">{item.role}</h3>
+          <span className="text-xs font-medium text-neonBlue bg-neonBlue/10 border border-neonBlue/20 px-2 py-1 rounded-full">
             {formatPeriod(item.startDate, item.endDate)}
           </span>
         </div>
-        <p className="text-sm font-medium text-secondary mb-3">{item.company}</p>
+        <p className="text-sm font-medium text-neonPurple mb-3">{item.company}</p>
 
         {item.impact.length > 0 && (
           <ul className="space-y-1.5 mb-4">
             {item.impact.map((statement) => (
               <li
                 key={statement}
-                className="flex items-start gap-2 text-sm text-foreground/70"
+                className="flex items-start gap-2 text-sm text-textSecondary"
               >
-                <span className="text-accent mt-1">&#8226;</span>
+                <span className="text-neonPink mt-1 flex-shrink-0">&#8226;</span>
                 {statement}
               </li>
             ))}
@@ -84,7 +89,7 @@ export default function Timeline() {
   const entries = experienceData;
 
   return (
-    <section id="experience" className="py-20 bg-background">
+    <section id="experience" className="py-20 section-bg-alt">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Experience"
@@ -92,13 +97,19 @@ export default function Timeline() {
         />
 
         {entries.length === 0 ? (
-          <p className="text-center text-foreground/60 text-lg">
+          <p className="text-center text-textSecondary text-lg">
             No experience entries yet
           </p>
         ) : (
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-primary/20" />
+            {/* Animated timeline line */}
+            <motion.div
+              className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 timeline-line-glow"
+              initial={{ scaleY: 0, originY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            />
 
             {entries.map((item, index) => (
               <TimelineCard
