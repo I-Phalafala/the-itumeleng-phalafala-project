@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
@@ -16,6 +16,11 @@ import { clearSessionCookie } from "@/lib/auth/session";
  */
 export function useAuthGuard(): { user: User | null; loading: boolean } {
   const router = useRouter();
+  // Use a ref so the callback always has the latest router without
+  // causing the effect to tear down and re-create the subscription.
+  const routerRef = useRef(router);
+  routerRef.current = router;
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,12 +32,12 @@ export function useAuthGuard(): { user: User | null; loading: boolean } {
       if (!firebaseUser) {
         // Clear the session cookie and redirect to login
         clearSessionCookie();
-        router.replace("/admin/login");
+        routerRef.current.replace("/admin/login");
       }
     });
 
     return unsubscribe;
-  }, [router]);
+  }, []); // Subscribe once on mount – router is accessed via ref
 
   return { user, loading };
 }
