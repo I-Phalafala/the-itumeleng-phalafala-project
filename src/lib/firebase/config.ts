@@ -23,10 +23,23 @@ if (getApps().length) {
   app = initializeApp(firebaseConfig);
 }
 
+function createServerStub<T>(serviceName: string): T {
+  return new Proxy(
+    {},
+    {
+      get() {
+        throw new Error(`${serviceName} can only be used in the browser runtime.`);
+      },
+    }
+  ) as T;
+}
+
+const isServer = typeof window === "undefined";
+
 // Export singleton service instances
-const db: Firestore = getFirestore(app);
-const auth: Auth = getAuth(app);
-const storage: FirebaseStorage = getStorage(app);
+const db: Firestore = isServer ? createServerStub<Firestore>("Firestore") : getFirestore(app);
+const auth: Auth = isServer ? createServerStub<Auth>("Auth") : getAuth(app);
+const storage: FirebaseStorage = isServer ? createServerStub<FirebaseStorage>("Storage") : getStorage(app);
 
 export { db, auth, storage };
 export default app;
