@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: #020617;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -15,5 +16,94 @@
 
   :target {
     scroll-margin-top: 5rem;
+  }
+
+  body {
+    background-color: #020617;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.12), transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(255, 46, 159, 0.10), transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06), transparent 70%);
+    color: #E2E8F0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .text-neon-gradient {
+    @apply bg-gradient-to-r from-neonBlue to-neonPink bg-clip-text text-transparent;
+  }
+
+  .text-neon-gradient-purple {
+    @apply bg-gradient-to-r from-neonPurple to-neonBlue bg-clip-text text-transparent;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
+    @apply hover:bg-white/8 hover:border-neonBlue/30;
+    @apply hover:shadow-[0_0_30px_rgba(0,217,255,0.15)];
+  }
+
+  .neon-border {
+    @apply border border-neonBlue/30;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.1);
+  }
+
+  .neon-glow-blue {
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4), 0 0 40px rgba(0, 217, 255, 0.1);
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 20px rgba(255, 46, 159, 0.4), 0 0 40px rgba(255, 46, 159, 0.1);
+  }
+
+  .neon-text-blue {
+    color: #00D9FF;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
+  }
+
+  .neon-text-pink {
+    color: #FF2E9F;
+    text-shadow: 0 0 10px rgba(255, 46, 159, 0.6);
+  }
+
+  .neon-text-purple {
+    color: #8B5CF6;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+  }
+
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(0, 217, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 217, 255, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .section-bg-alt {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .btn-neon-primary {
+    @apply bg-gradient-to-r from-neonBlue to-neonPurple text-white font-semibold px-8 py-3 rounded-lg;
+    @apply transition-all duration-300;
+    @apply hover:shadow-[0_0_25px_rgba(0,217,255,0.5)] hover:scale-105;
+  }
+
+  .btn-neon-secondary {
+    @apply border border-neonBlue/50 text-neonBlue font-semibold px-8 py-3 rounded-lg;
+    @apply transition-all duration-300;
+    @apply hover:bg-neonBlue/10 hover:border-neonBlue hover:shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:scale-105;
+  }
+
+  .timeline-line-glow {
+    background: linear-gradient(to bottom, rgba(0, 217, 255, 0.8), rgba(255, 46, 159, 0.8));
+    box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
   }
 }

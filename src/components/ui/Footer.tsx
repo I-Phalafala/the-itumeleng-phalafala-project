@@ -2,18 +2,21 @@ import { profileData } from "@/constants/profile";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white py-8">
+    <footer className="relative border-t border-white/10 bg-white/[0.02] backdrop-blur-sm py-10">
+      {/* Subtle top glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-neonBlue/50 to-transparent" />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-lg font-heading font-semibold mb-2">
+        <p className="text-lg font-heading font-semibold mb-1 bg-gradient-to-r from-neonBlue to-neonPink bg-clip-text text-transparent">
           {profileData.name}
         </p>
-        <p className="text-sm text-gray-300 mb-4">
+        <p className="text-sm text-textSecondary mb-5">
           {profileData.title} &middot; {profileData.location}
         </p>
-        <div className="flex justify-center space-x-6 mb-4">
+        <div className="flex justify-center space-x-6 mb-5">
           <a
             href={`mailto:${profileData.email}`}
-            className="text-gray-300 hover:text-accent transition-colors"
+            className="text-textSecondary hover:text-neonBlue transition-colors duration-200 hover:drop-shadow-[0_0_6px_rgba(0,217,255,0.7)]"
             aria-label="Email"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -25,7 +28,7 @@ export default function Footer() {
             href={profileData.linkedIn}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-300 hover:text-accent transition-colors"
+            className="text-textSecondary hover:text-neonBlue transition-colors duration-200 hover:drop-shadow-[0_0_6px_rgba(0,217,255,0.7)]"
             aria-label="LinkedIn"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -33,7 +36,7 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-textSecondary/50">
           &copy; {new Date().getFullYear()} {profileData.name}. All rights reserved.
         </p>
       </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
+import { staggerContainer, cardReveal } from "@/lib/animations";
 
 interface QualityCard {
   id: string;
@@ -15,16 +16,16 @@ const FallbackIcon = () => (
   <div
     data-testid="fallback-icon"
     aria-label="Icon placeholder"
-    className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center"
+    className="w-10 h-10 rounded-full bg-neonBlue/10 border border-neonBlue/30 flex items-center justify-center"
   >
-    <span className="text-secondary text-xl font-bold">?</span>
+    <span className="text-neonBlue text-xl font-bold">?</span>
   </div>
 );
 
 const UITestingIcon = () => (
   <svg
     aria-hidden="true"
-    className="w-10 h-10 text-secondary"
+    className="w-10 h-10 text-neonBlue"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -39,7 +40,7 @@ const UITestingIcon = () => (
 const APITestingIcon = () => (
   <svg
     aria-hidden="true"
-    className="w-10 h-10 text-secondary"
+    className="w-10 h-10 text-neonPink"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -53,7 +54,7 @@ const APITestingIcon = () => (
 const AutomationIcon = () => (
   <svg
     aria-hidden="true"
-    className="w-10 h-10 text-secondary"
+    className="w-10 h-10 text-neonPurple"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -67,7 +68,7 @@ const AutomationIcon = () => (
 const CICDIcon = () => (
   <svg
     aria-hidden="true"
-    className="w-10 h-10 text-secondary"
+    className="w-10 h-10 text-neonBlue"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -117,28 +118,21 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   "ci-cd": <CICDIcon />,
 };
 
+const CARD_ACCENT: Record<string, string> = {
+  "ui-testing": "border-neonBlue/30 hover:border-neonBlue/50 hover:shadow-[0_0_25px_rgba(0,217,255,0.12)]",
+  "api-testing": "border-neonPink/30 hover:border-neonPink/50 hover:shadow-[0_0_25px_rgba(255,46,159,0.12)]",
+  "test-automation": "border-neonPurple/30 hover:border-neonPurple/50 hover:shadow-[0_0_25px_rgba(139,92,246,0.12)]",
+  "ci-cd": "border-neonBlue/30 hover:border-neonBlue/50 hover:shadow-[0_0_25px_rgba(0,217,255,0.12)]",
+};
+
 interface QualityMindsetProps {
   /** Override the default card data; useful for testing. */
   cards?: Omit<QualityCard, "icon">[];
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
 export default function QualityMindset({ cards = QUALITY_CARDS }: QualityMindsetProps) {
   return (
-    <section id="quality-mindset" className="py-20 bg-background">
+    <section id="quality-mindset" className="py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Quality Mindset"
@@ -147,29 +141,30 @@ export default function QualityMindset({ cards = QUALITY_CARDS }: QualityMindset
 
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 gap-8"
-          variants={containerVariants}
+          variants={staggerContainer}
           initial="hidden"
-          whileInView="visible"
+          whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
           {cards.map((card) => {
             const icon = ICON_MAP[card.id] ?? <FallbackIcon />;
             const title = card.title || "Untitled";
+            const accentClass = CARD_ACCENT[card.id] ?? "border-white/10 hover:border-neonBlue/30 hover:shadow-[0_0_25px_rgba(0,217,255,0.1)]";
 
             return (
               <motion.div
                 key={card.id}
-                variants={cardVariants}
-                className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow flex flex-col gap-4"
+                variants={cardReveal}
+                className={`bg-white/5 backdrop-blur-xl border rounded-xl p-6 transition-all duration-300 hover:bg-white/8 flex flex-col gap-4 ${accentClass}`}
               >
                 <div className="flex items-center gap-4">
                   <div className="shrink-0">{icon}</div>
-                  <h3 className="text-lg font-semibold font-heading text-primary">
+                  <h3 className="text-lg font-semibold font-heading text-textPrimary">
                     {title}
                   </h3>
                 </div>
 
-                <p className="text-foreground/70 leading-relaxed text-sm">
+                <p className="text-textSecondary leading-relaxed text-sm">
                   {card.description}
                 </p>
 
@@ -177,7 +172,7 @@ export default function QualityMindset({ cards = QUALITY_CARDS }: QualityMindset
                   {card.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="bg-secondary/10 text-secondary text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap max-w-full overflow-hidden text-ellipsis"
+                      className="bg-neonBlue/10 text-neonBlue border border-neonBlue/20 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap max-w-full overflow-hidden text-ellipsis"
                     >
                       {tool}
                     </span>
