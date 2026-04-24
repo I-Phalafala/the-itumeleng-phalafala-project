@@ -17,7 +17,7 @@ export default function Hero() {
     ? {}
     : {
         animate: { y: [0, 10, 0] },
-        transition: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+        transition: { repeat: Infinity, duration: 2, ease: "easeInOut" as const },
       };
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
