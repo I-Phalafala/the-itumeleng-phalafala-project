@@ -10,6 +10,12 @@ const SYSTEM_METRICS = [
   { label: "Automation", value: "Web • API • Mobile" },
   { label: "Delivery", value: "CI/CD Ready" },
 ];
+const HERO_PANEL_CLASS =
+  "relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/55 px-6 py-12 shadow-[0_0_50px_rgba(0,217,255,0.08)] backdrop-blur-2xl sm:px-10 lg:px-14";
+const STATUS_BADGE_CLASS =
+  "mb-6 inline-flex items-center gap-2 rounded-full border border-neonBlue/30 bg-neonBlue/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-neonBlue shadow-[0_0_20px_rgba(0,217,255,0.14)]";
+const METRIC_CARD_CLASS =
+  "rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl";
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -60,7 +66,7 @@ export default function Hero() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/55 px-6 py-12 shadow-[0_0_50px_rgba(0,217,255,0.08)] backdrop-blur-2xl sm:px-10 lg:px-14"
+          className={HERO_PANEL_CLASS}
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,217,255,0.12),transparent_45%),linear-gradient(135deg,rgba(139,92,246,0.14),transparent_55%)]" />
           <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-neonBlue/60 to-transparent" />
@@ -73,7 +79,7 @@ export default function Hero() {
           <div className="relative">
             <motion.div
               variants={subtleVariants}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-neonBlue/30 bg-neonBlue/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-neonBlue shadow-[0_0_20px_rgba(0,217,255,0.14)]"
+              className={STATUS_BADGE_CLASS}
             >
               <span className="h-2 w-2 rounded-full bg-neonBlue shadow-[0_0_10px_rgba(0,217,255,0.9)]" />
               System Online
@@ -135,7 +141,7 @@ export default function Hero() {
               {SYSTEM_METRICS.map((metric) => (
                 <div
                   key={metric.label}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl"
+                  className={METRIC_CARD_CLASS}
                 >
                   <p className="mb-1 text-xs uppercase tracking-[0.25em] text-textSecondary">
                     {metric.label}
