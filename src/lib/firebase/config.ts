@@ -12,15 +12,20 @@ const REQUIRED_ENV_VARS = [
   "NEXT_PUBLIC_FIREBASE_APP_ID",
 ] as const;
 
-const missingEnvVars = REQUIRED_ENV_VARS.filter((envVar) => {
-  const value = process.env[envVar];
-  return typeof value !== "string" || value.trim() === "";
-});
+const isServer = typeof window === "undefined";
+const shouldValidateFirebaseEnv = process.env.NODE_ENV === "test" || !isServer;
 
-if (missingEnvVars.length > 0) {
-  throw new Error(
-    `Missing required Firebase environment variable(s): ${missingEnvVars.join(", ")}`
-  );
+if (shouldValidateFirebaseEnv) {
+  const missingEnvVars = REQUIRED_ENV_VARS.filter((envVar) => {
+    const value = process.env[envVar];
+    return typeof value !== "string" || value.trim() === "";
+  });
+
+  if (missingEnvVars.length > 0) {
+    throw new Error(
+      `Missing required Firebase environment variable(s): ${missingEnvVars.join(", ")}`
+    );
+  }
 }
 
 const firebaseConfig = {
@@ -68,10 +73,7 @@ function createUnavailableService<T>(serviceName: string, cause: unknown): T {
   ) as T;
 }
 
-function createBrowserService<T>(
-  serviceName: string,
-  initializer: () => T
-): T {
+function createBrowserService<T>(serviceName: string, initializer: () => T): T {
   try {
     return initializer();
   } catch (error) {
@@ -79,8 +81,6 @@ function createBrowserService<T>(
     return createUnavailableService<T>(serviceName, error);
   }
 }
-
-const isServer = typeof window === "undefined";
 
 // Export singleton service instances
 const db: Firestore = isServer

@@ -85,54 +85,54 @@ export default function Hero() {
               System Online
             </motion.div>
 
-          <motion.p
-            variants={textVariants}
-            className="text-neonBlue font-medium text-sm mb-4 tracking-[0.25em] uppercase"
-            style={{ textShadow: "0 0 10px rgba(0,217,255,0.5)" }}
-          >
-            Hello, I&apos;m
-          </motion.p>
-
-          <motion.h1
-            variants={textVariants}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold font-heading mb-6 break-words bg-gradient-to-r from-neonBlue via-neonPurple to-neonPink bg-clip-text text-transparent"
-          >
-            {profileData.name}
-          </motion.h1>
-
-          <motion.p
-            variants={textVariants}
-            className="text-xl sm:text-2xl text-textPrimary mb-4 font-light tracking-wide"
-          >
-            {profileData.title}
-          </motion.p>
-
-          <motion.p
-            variants={subtleVariants}
-            className="text-textSecondary max-w-2xl mx-auto mb-10 leading-relaxed text-lg"
-          >
-            {profileData.tagline || FALLBACK_TAGLINE}
-          </motion.p>
-
-          <motion.div
-            variants={subtleVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <a
-              href="#projects"
-              onClick={handleScrollToProjects}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,217,255,0.5)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonBlue focus:ring-offset-2 focus:ring-offset-bg"
+            <motion.p
+              variants={textVariants}
+              className="text-neonBlue font-medium text-sm mb-4 tracking-[0.25em] uppercase"
+              style={{ textShadow: "0 0 10px rgba(0,217,255,0.5)" }}
             >
-              View My Work
-            </a>
-            <a
-              href={profileData.cvUrl || "/cv.pdf"}
-              download
-              className="inline-flex items-center gap-2 border border-neonBlue/50 text-neonBlue font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:bg-neonBlue/10 hover:border-neonBlue hover:shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonBlue focus:ring-offset-2 focus:ring-offset-bg"
+              Hello, I&apos;m
+            </motion.p>
+
+            <motion.h1
+              variants={textVariants}
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold font-heading mb-6 break-words bg-gradient-to-r from-neonBlue via-neonPurple to-neonPink bg-clip-text text-transparent"
             >
-              Download CV
-            </a>
-          </motion.div>
+              {profileData.name}
+            </motion.h1>
+
+            <motion.p
+              variants={textVariants}
+              className="text-xl sm:text-2xl text-textPrimary mb-4 font-light tracking-wide"
+            >
+              {profileData.title}
+            </motion.p>
+
+            <motion.div
+              variants={subtleVariants}
+              className="text-textSecondary mx-auto mb-10 max-w-2xl text-lg leading-relaxed"
+            >
+              {profileData.tagline || FALLBACK_TAGLINE}
+            </motion.div>
+
+            <motion.div
+              variants={subtleVariants}
+              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
+              <a
+                href="#projects"
+                onClick={handleScrollToProjects}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,217,255,0.5)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonBlue focus:ring-offset-2 focus:ring-offset-bg"
+              >
+                View My Work
+              </a>
+              <a
+                href={profileData.cvUrl || "/cv.pdf"}
+                download
+                className="inline-flex items-center gap-2 border border-neonBlue/50 text-neonBlue font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:bg-neonBlue/10 hover:border-neonBlue hover:shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-neonBlue focus:ring-offset-2 focus:ring-offset-bg"
+              >
+                Download CV
+              </a>
+            </motion.div>
 
             <motion.div
               variants={subtleVariants}
