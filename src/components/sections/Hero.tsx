@@ -5,6 +5,11 @@ import { profileData } from "@/constants/profile";
 import { staggerContainer, heroTextReveal, fadeUpBlur } from "@/lib/animations";
 
 const FALLBACK_TAGLINE = "Passionate about building reliable, high-quality software.";
+const SYSTEM_METRICS = [
+  { label: "Precision QA", value: "6+ Years" },
+  { label: "Automation", value: "Web • API • Mobile" },
+  { label: "Delivery", value: "CI/CD Ready" },
+];
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -12,13 +17,6 @@ export default function Hero() {
   const containerVariants = prefersReducedMotion ? {} : staggerContainer;
   const textVariants = prefersReducedMotion ? {} : heroTextReveal;
   const subtleVariants = prefersReducedMotion ? {} : fadeUpBlur;
-
-  const scrollIndicatorProps = prefersReducedMotion
-    ? {}
-    : {
-        animate: { y: [0, 10, 0] },
-        transition: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-      };
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -57,12 +55,30 @@ export default function Hero() {
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
+          className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/55 px-6 py-12 shadow-[0_0_50px_rgba(0,217,255,0.08)] backdrop-blur-2xl sm:px-10 lg:px-14"
         >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,217,255,0.12),transparent_45%),linear-gradient(135deg,rgba(139,92,246,0.14),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-neonBlue/60 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-6 bottom-6 h-px bg-gradient-to-r from-transparent via-neonPink/50 to-transparent" />
+          <div className="pointer-events-none absolute left-6 top-6 h-8 w-8 border-l border-t border-neonBlue/50" />
+          <div className="pointer-events-none absolute right-6 top-6 h-8 w-8 border-r border-t border-neonPink/50" />
+          <div className="pointer-events-none absolute bottom-6 left-6 h-8 w-8 border-b border-l border-neonPurple/50" />
+          <div className="pointer-events-none absolute bottom-6 right-6 h-8 w-8 border-b border-r border-neonBlue/40" />
+
+          <div className="relative">
+            <motion.div
+              variants={subtleVariants}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-neonBlue/30 bg-neonBlue/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-neonBlue shadow-[0_0_20px_rgba(0,217,255,0.14)]"
+            >
+              <span className="h-2 w-2 rounded-full bg-neonBlue shadow-[0_0_10px_rgba(0,217,255,0.9)]" />
+              System Online
+            </motion.div>
+
           <motion.p
             variants={textVariants}
             className="text-neonBlue font-medium text-sm mb-4 tracking-[0.25em] uppercase"
@@ -111,10 +127,38 @@ export default function Hero() {
               Download CV
             </a>
           </motion.div>
+
+            <motion.div
+              variants={subtleVariants}
+              className="mt-10 grid gap-3 text-left sm:grid-cols-3"
+            >
+              {SYSTEM_METRICS.map((metric) => (
+                <div
+                  key={metric.label}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-xl"
+                >
+                  <p className="mb-1 text-xs uppercase tracking-[0.25em] text-textSecondary">
+                    {metric.label}
+                  </p>
+                  <p className="text-sm font-semibold text-textPrimary sm:text-base">
+                    {metric.value}
+                  </p>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
 
         {/* Scroll indicator */}
-        <motion.div className="mt-16" {...scrollIndicatorProps}>
+        <motion.div
+          className="mt-16"
+          animate={prefersReducedMotion ? undefined : { y: [0, 10, 0] }}
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { repeat: Infinity, duration: 2, ease: "easeInOut" as const }
+          }
+        >
           <svg
             className="h-8 w-8 mx-auto text-neonBlue/60"
             fill="none"
