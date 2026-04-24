@@ -156,7 +156,7 @@ export default function Hero() {
           transition={
             prefersReducedMotion
               ? undefined
-              : { repeat: Infinity, duration: 2, ease: "easeInOut" as const }
+              : { repeat: Infinity, duration: 2, ease: "easeInOut" }
           }
         >
           <svg
