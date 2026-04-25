@@ -5,7 +5,7 @@ import { ExperienceItem } from "@/types/experience";
 import { experienceData } from "@/constants/experience";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SkillBadge from "@/components/ui/SkillBadge";
-import { timelineCardLeft, timelineCardRight } from "@/lib/animations";
+import { timelineCardLeft, timelineCardRight, timelineLineReveal } from "@/lib/animations";
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "Present";
@@ -105,10 +105,10 @@ export default function Timeline() {
             {/* Animated timeline line */}
             <motion.div
               className="absolute left-4 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 timeline-line-glow"
-              initial={{ scaleY: 0, originY: 0 }}
-              whileInView={{ scaleY: 1 }}
+              variants={timelineLineReveal}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
             />
 
             {entries.map((item, index) => (

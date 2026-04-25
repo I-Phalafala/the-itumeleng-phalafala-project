@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import BackgroundFX from "@/components/ui/BackgroundFX";
+import SmoothScrollProvider from "@/components/ui/SmoothScrollProvider";
 
 export const metadata: Metadata = {
   title: "Itumeleng Phalafala | QA Engineer & Developer",
@@ -22,7 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-bg text-textPrimary antialiased min-h-screen">
-        {children}
+        <SmoothScrollProvider>
+          <BackgroundFX />
+          <div className="relative isolate min-h-screen">
+            {children}
+          </div>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

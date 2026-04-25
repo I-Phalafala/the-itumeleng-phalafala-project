@@ -13,6 +13,8 @@ jest.mock("framer-motion", () => ({
     h1: (props: any) => <h1 className={props.className}>{props.children}</h1>,
   },
   useReducedMotion: () => true,
+  useScroll: () => ({ scrollYProgress: { on: jest.fn() } }),
+  useTransform: () => 0,
 }));
 
 describe("Hero section", () => {

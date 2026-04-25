@@ -81,12 +81,22 @@ describe("Firebase config", () => {
     expect(initializeApp).not.toHaveBeenCalled();
   });
 
-  it("throws error when required env vars are missing", async () => {
+  it("keeps Firebase imports lazy when required env vars are missing", async () => {
     delete process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
     delete process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
-    await expect(import("@/lib/firebase/config")).rejects.toThrow(
-      /Missing required Firebase environment variable\(s\):.*NEXT_PUBLIC_FIREBASE_API_KEY.*NEXT_PUBLIC_FIREBASE_PROJECT_ID/
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const config = await import("@/lib/firebase/config");
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Missing required Firebase environment variable\(s\):.*NEXT_PUBLIC_FIREBASE_API_KEY.*NEXT_PUBLIC_FIREBASE_PROJECT_ID/
+      )
     );
+    expect(() => (config.db as unknown as Record<string, unknown>).type).toThrow(
+      /Firestore is unavailable/
+    );
+
+    warnSpy.mockRestore();
   });
 });
