@@ -14,19 +14,15 @@ const REQUIRED_ENV_VARS = [
 
 const isServer = typeof window === "undefined";
 const shouldValidateFirebaseEnv = process.env.NODE_ENV === "test" || !isServer;
-
-if (shouldValidateFirebaseEnv) {
-  const missingEnvVars = REQUIRED_ENV_VARS.filter((envVar) => {
-    const value = process.env[envVar];
-    return typeof value !== "string" || value.trim() === "";
-  });
-
-  if (missingEnvVars.length > 0) {
-    throw new Error(
-      `Missing required Firebase environment variable(s): ${missingEnvVars.join(", ")}`
-    );
-  }
-}
+const missingEnvVars = REQUIRED_ENV_VARS.filter((envVar) => {
+  const value = process.env[envVar];
+  return typeof value !== "string" || value.trim() === "";
+});
+const firebaseEnvErrorMessage =
+  missingEnvVars.length > 0
+    ? `Missing required Firebase environment variable(s): ${missingEnvVars.join(", ")}`
+    : null;
+const hasFirebaseEnv = firebaseEnvErrorMessage === null;
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY as string,
@@ -40,14 +36,6 @@ const firebaseConfig = {
   }),
 };
 
-// Initialize Firebase (prevent re-initialization in dev with hot reload)
-let app: FirebaseApp;
-if (getApps().length) {
-  app = getApp();
-} else {
-  app = initializeApp(firebaseConfig);
-}
-
 function createServerStub<T>(serviceName: string): T {
   return new Proxy(
     {},
@@ -59,9 +47,17 @@ function createServerStub<T>(serviceName: string): T {
   ) as T;
 }
 
+function createUnavailableApp(message: string): FirebaseApp {
+  return createUnavailableService<FirebaseApp>("Firebase App", message);
+}
+
 function createUnavailableService<T>(serviceName: string, cause: unknown): T {
   const message =
-    cause instanceof Error ? cause.message : `${serviceName} failed to initialize.`;
+    cause instanceof Error
+      ? cause.message
+      : typeof cause === "string" && cause.trim() !== ""
+        ? cause
+        : `${serviceName} failed to initialize.`;
 
   return new Proxy(
     {},
@@ -82,18 +78,40 @@ function createBrowserService<T>(serviceName: string, initializer: () => T): T {
   }
 }
 
+if (shouldValidateFirebaseEnv && firebaseEnvErrorMessage) {
+  console.warn(firebaseEnvErrorMessage);
+}
+
+// Initialize Firebase (prevent re-initialization in dev with hot reload)
+let app: FirebaseApp;
+if (hasFirebaseEnv) {
+  if (getApps().length) {
+    app = getApp();
+  } else {
+    app = initializeApp(firebaseConfig);
+  }
+} else {
+  app = createUnavailableApp(firebaseEnvErrorMessage ?? "Firebase configuration is unavailable.");
+}
+
 // Export singleton service instances
 const db: Firestore = isServer
   ? createServerStub<Firestore>("Firestore")
-  : createBrowserService<Firestore>("Firestore", () => getFirestore(app));
+  : hasFirebaseEnv
+    ? createBrowserService<Firestore>("Firestore", () => getFirestore(app))
+    : createUnavailableService<Firestore>("Firestore", firebaseEnvErrorMessage);
 
 const auth: Auth = isServer
   ? createServerStub<Auth>("Auth")
-  : createBrowserService<Auth>("Auth", () => getAuth(app));
+  : hasFirebaseEnv
+    ? createBrowserService<Auth>("Auth", () => getAuth(app))
+    : createUnavailableService<Auth>("Auth", firebaseEnvErrorMessage);
 
 const storage: FirebaseStorage = isServer
   ? createServerStub<FirebaseStorage>("Storage")
-  : createBrowserService<FirebaseStorage>("Storage", () => getStorage(app));
+  : hasFirebaseEnv
+    ? createBrowserService<FirebaseStorage>("Storage", () => getStorage(app))
+    : createUnavailableService<FirebaseStorage>("Storage", firebaseEnvErrorMessage);
 
 export { db, auth, storage };
 export default app;
