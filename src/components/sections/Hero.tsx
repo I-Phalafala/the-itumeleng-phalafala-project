@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { profileData } from "@/constants/profile";
 import { staggerContainer, heroTextReveal, fadeUpBlur } from "@/lib/animations";
 
@@ -19,10 +19,15 @@ const METRIC_CARD_CLASS =
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
 
   const containerVariants = prefersReducedMotion ? {} : staggerContainer;
   const textVariants = prefersReducedMotion ? {} : heroTextReveal;
   const subtleVariants = prefersReducedMotion ? {} : fadeUpBlur;
+  const panelY = useTransform(scrollYProgress, [0, 0.3], [0, prefersReducedMotion ? 0 : -40]);
+  const orbBlueY = useTransform(scrollYProgress, [0, 0.3], [0, prefersReducedMotion ? 0 : -80]);
+  const orbPinkY = useTransform(scrollYProgress, [0, 0.3], [0, prefersReducedMotion ? 0 : 60]);
+  const orbPurpleY = useTransform(scrollYProgress, [0, 0.3], [0, prefersReducedMotion ? 0 : -30]);
 
   const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -44,19 +49,28 @@ export default function Hero() {
       {/* Floating glow orbs */}
       <motion.div
         className="absolute top-1/4 left-1/6 w-72 h-72 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(0,217,255,0.12) 0%, transparent 70%)" }}
+        style={{
+          y: orbBlueY,
+          background: "radial-gradient(circle, rgba(0,217,255,0.12) 0%, transparent 70%)",
+        }}
         animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute bottom-1/4 right-1/6 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(255,46,159,0.1) 0%, transparent 70%)" }}
+        style={{
+          y: orbPinkY,
+          background: "radial-gradient(circle, rgba(255,46,159,0.1) 0%, transparent 70%)",
+        }}
         animate={prefersReducedMotion ? {} : { scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }}
+        style={{
+          y: orbPurpleY,
+          background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)",
+        }}
         animate={prefersReducedMotion ? {} : { rotate: [0, 360] }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       />
@@ -66,6 +80,7 @@ export default function Hero() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
+          style={{ y: panelY }}
           className={HERO_PANEL_CLASS}
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,217,255,0.12),transparent_45%),linear-gradient(135deg,rgba(139,92,246,0.14),transparent_55%)]" />

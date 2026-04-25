@@ -6,12 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { getProjectBySlug } from "@/lib/firebase/projects";
+import { fadeUp, fadeUpBlur } from "@/lib/animations";
 import { Project } from "@/types/project";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-};
 
 function DetailSection({
   title,
@@ -24,9 +20,9 @@ function DetailSection({
 }) {
   return (
     <motion.section
-      variants={fadeInUp}
+      variants={fadeUpBlur}
       initial="hidden"
-      animate="visible"
+      animate="show"
       transition={{ duration: 0.5, delay }}
       className="mb-10"
     >
@@ -94,16 +90,17 @@ export default function ProjectDetailPage() {
 
   return (
     <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      variants={fadeUp}
+      initial="hidden"
+      animate="show"
       transition={{ duration: 0.4 }}
       className="min-h-screen bg-background py-20"
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          variants={fadeInUp}
+          variants={fadeUpBlur}
           initial="hidden"
-          animate="visible"
+          animate="show"
           transition={{ duration: 0.4 }}
         >
           <Link
@@ -129,9 +126,9 @@ export default function ProjectDetailPage() {
 
         {project.thumbnailUrl ? (
           <motion.div
-            variants={fadeInUp}
+            variants={fadeUpBlur}
             initial="hidden"
-            animate="visible"
+            animate="show"
             transition={{ duration: 0.5, delay: 0.1 }}
             className="relative w-full h-64 sm:h-80 rounded-xl overflow-hidden mb-8"
           >
@@ -144,9 +141,9 @@ export default function ProjectDetailPage() {
           </motion.div>
         ) : (
           <motion.div
-            variants={fadeInUp}
+            variants={fadeUpBlur}
             initial="hidden"
-            animate="visible"
+            animate="show"
             transition={{ duration: 0.5, delay: 0.1 }}
             className="w-full h-64 sm:h-80 rounded-xl bg-gray-200 flex items-center justify-center mb-8"
           >
@@ -168,9 +165,9 @@ export default function ProjectDetailPage() {
         )}
 
         <motion.h1
-          variants={fadeInUp}
+          variants={fadeUpBlur}
           initial="hidden"
-          animate="visible"
+          animate="show"
           transition={{ duration: 0.5, delay: 0.15 }}
           className="text-3xl sm:text-4xl font-bold font-heading text-primary mb-4"
         >
@@ -179,9 +176,9 @@ export default function ProjectDetailPage() {
 
         {project.tags.length > 0 && (
           <motion.div
-            variants={fadeInUp}
+            variants={fadeUpBlur}
             initial="hidden"
-            animate="visible"
+            animate="show"
             transition={{ duration: 0.5, delay: 0.2 }}
             className="flex flex-wrap gap-2 mb-6"
           >
@@ -197,9 +194,9 @@ export default function ProjectDetailPage() {
         )}
 
         <motion.p
-          variants={fadeInUp}
+          variants={fadeUpBlur}
           initial="hidden"
-          animate="visible"
+          animate="show"
           transition={{ duration: 0.5, delay: 0.25 }}
           className="text-foreground/80 leading-relaxed mb-10"
         >
@@ -249,9 +246,9 @@ export default function ProjectDetailPage() {
 
         {project.screenshots && project.screenshots.length > 0 && (
           <motion.section
-            variants={fadeInUp}
+            variants={fadeUpBlur}
             initial="hidden"
-            animate="visible"
+            animate="show"
             transition={{ duration: 0.5, delay: sectionDelays[5] }}
             className="mb-10"
           >
@@ -277,9 +274,9 @@ export default function ProjectDetailPage() {
         )}
 
         <motion.div
-          variants={fadeInUp}
+          variants={fadeUpBlur}
           initial="hidden"
-          animate="visible"
+          animate="show"
           transition={{ duration: 0.4, delay: footerDelay }}
           className="pt-6 border-t border-gray-200"
         >

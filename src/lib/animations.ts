@@ -114,3 +114,25 @@ export const timelineCardRight: Variants = {
     transition: { duration: 0.55, ease: "easeOut" },
   },
 };
+
+export const timelineLineReveal: Variants = {
+  hidden: { scaleY: 0, originY: 0 },
+  show: {
+    scaleY: 1,
+    transition: { duration: 1.2, ease: "easeOut" },
+  },
+};
+
+export const accordionReveal: Variants = {
+  hidden: { height: 0, opacity: 0 },
+  show: {
+    height: "auto",
+    opacity: 1,
+    transition: { duration: 0.35, ease: "easeOut" },
+  },
+  exit: {
+    height: 0,
+    opacity: 0,
+    transition: { duration: 0.25, ease: "easeInOut" },
+  },
+};

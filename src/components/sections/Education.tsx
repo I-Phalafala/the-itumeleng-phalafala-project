@@ -1,13 +1,52 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { profileData } from "@/constants/profile";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Card from "@/components/ui/Card";
-import { staggerContainer, fadeInLeft, fadeInRight } from "@/lib/animations";
+import {
+  staggerContainer,
+  fadeInLeft,
+  fadeInRight,
+  accordionReveal,
+} from "@/lib/animations";
+
+function PanelToggle({
+  title,
+  accentClass,
+  isOpen,
+  onClick,
+}: {
+  title: string;
+  accentClass: string;
+  isOpen: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-full items-center justify-between gap-3 text-left"
+      aria-expanded={isOpen}
+    >
+      <span className={`text-xl font-semibold font-heading ${accentClass}`}>{title}</span>
+      <span
+        className={`inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-textSecondary transition-transform duration-300 ${
+          isOpen ? "rotate-180" : ""
+        }`}
+      >
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </span>
+    </button>
+  );
+}
 
 export default function Education() {
   const { education, certificates } = profileData;
+  const [openPanel, setOpenPanel] = useState<"education" | "certifications">("education");
 
   return (
     <section id="education" className="py-20">
@@ -45,34 +84,52 @@ export default function Education() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold font-heading text-neonBlue">
-                  Education
-                </h3>
               </div>
-              <h4 className="text-lg font-medium text-textPrimary mb-1">
-                {education.degree}
-              </h4>
-              <p className="text-neonPurple font-medium mb-1">
-                {education.institution}
-              </p>
-              <p className="text-sm text-textSecondary mb-4">
-                {education.location} &middot; {education.level}
-              </p>
-              <div>
-                <p className="text-sm font-medium text-textSecondary mb-2">
-                  Coursework:
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {education.coursework.map((course) => (
-                    <span
-                      key={course}
-                      className="text-xs bg-neonBlue/5 text-neonBlue/80 border border-neonBlue/20 px-2 py-1 rounded"
-                    >
-                      {course}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <PanelToggle
+                title="Education"
+                accentClass="text-neonBlue"
+                isOpen={openPanel === "education"}
+                onClick={() => setOpenPanel((current) => (
+                  current === "education" ? "certifications" : "education"
+                ))}
+              />
+              <AnimatePresence initial={false}>
+                {openPanel === "education" && (
+                  <motion.div
+                    key="education-panel"
+                    variants={accordionReveal}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
+                    className="overflow-hidden pt-5"
+                  >
+                    <h4 className="text-lg font-medium text-textPrimary mb-1">
+                      {education.degree}
+                    </h4>
+                    <p className="text-neonPurple font-medium mb-1">
+                      {education.institution}
+                    </p>
+                    <p className="text-sm text-textSecondary mb-4">
+                      {education.location} &middot; {education.level}
+                    </p>
+                    <div>
+                      <p className="text-sm font-medium text-textSecondary mb-2">
+                        Coursework:
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {education.coursework.map((course) => (
+                          <span
+                            key={course}
+                            className="text-xs bg-neonBlue/5 text-neonBlue/80 border border-neonBlue/20 px-2 py-1 rounded"
+                          >
+                            {course}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Card>
           </motion.div>
 
@@ -95,28 +152,46 @@ export default function Education() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold font-heading text-neonPink">
-                  Certifications
-                </h3>
               </div>
-              <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                {certificates.map((cert) => (
-                  <div
-                    key={cert.name}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200"
-                  >
-                    <span className="flex-shrink-0 w-12 text-center text-xs font-bold text-neonPink bg-neonPink/10 border border-neonPink/20 py-1 rounded">
-                      {cert.year}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-textPrimary">
-                        {cert.name}
-                      </p>
-                      <p className="text-xs text-textSecondary">{cert.issuer}</p>
-                    </div>
-                  </div>
+              <PanelToggle
+                title="Certifications"
+                accentClass="text-neonPink"
+                isOpen={openPanel === "certifications"}
+                onClick={() => setOpenPanel((current) => (
+                  current === "certifications" ? "education" : "certifications"
                 ))}
-              </div>
+              />
+              <AnimatePresence initial={false}>
+                {openPanel === "certifications" && (
+                  <motion.div
+                    key="certifications-panel"
+                    variants={accordionReveal}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
+                    className="max-h-96 overflow-hidden pt-5"
+                  >
+                    <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
+                      {certificates.map((cert) => (
+                        <div
+                          key={cert.name}
+                          className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors duration-200"
+                        >
+                          <span className="flex-shrink-0 w-12 text-center text-xs font-bold text-neonPink bg-neonPink/10 border border-neonPink/20 py-1 rounded">
+                            {cert.year}
+                          </span>
+                          <div>
+                            <p className="text-sm font-medium text-textPrimary">
+                              {cert.name}
+                            </p>
+                            <p className="text-xs text-textSecondary">{cert.issuer}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Card>
           </motion.div>
         </motion.div>

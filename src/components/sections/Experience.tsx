@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { profileData } from "@/constants/profile";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SkillBadge from "@/components/ui/SkillBadge";
+import { fadeUp } from "@/lib/animations";
 
 export default function Experience() {
   return (
@@ -21,8 +22,9 @@ export default function Experience() {
           {profileData.experience.map((exp, index) => (
             <motion.div
               key={`${exp.company}-${exp.role}`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`relative mb-12 md:w-1/2 ${
