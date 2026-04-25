@@ -38,13 +38,33 @@ export default function Skills() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getSkills()
-      .then(setSkills)
-      .catch((error) => {
+    let isActive = true;
+
+    const loadSkills = async () => {
+      try {
+        const nextSkills = await getSkills();
+
+        if (isActive) {
+          setSkills(nextSkills);
+        }
+      } catch (error) {
         console.error("Failed to fetch skills:", error);
-        setSkills([]);
-      })
-      .finally(() => setLoading(false));
+
+        if (isActive) {
+          setSkills([]);
+        }
+      } finally {
+        if (isActive) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadSkills();
+
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const grouped = groupByCategory(skills);

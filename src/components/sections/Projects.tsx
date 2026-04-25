@@ -13,13 +13,33 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProjects()
-      .then(setProjects)
-      .catch((error) => {
+    let isActive = true;
+
+    const loadProjects = async () => {
+      try {
+        const nextProjects = await getProjects();
+
+        if (isActive) {
+          setProjects(nextProjects);
+        }
+      } catch (error) {
         console.error("Failed to fetch projects:", error);
-        setProjects([]);
-      })
-      .finally(() => setLoading(false));
+
+        if (isActive) {
+          setProjects([]);
+        }
+      } finally {
+        if (isActive) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadProjects();
+
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   return (
