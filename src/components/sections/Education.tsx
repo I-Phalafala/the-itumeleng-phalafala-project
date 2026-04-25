@@ -46,7 +46,7 @@ function PanelToggle({
 
 export default function Education() {
   const { education, certificates } = profileData;
-  const [openPanel, setOpenPanel] = useState<"education" | "certifications">("education");
+  const [openPanel, setOpenPanel] = useState<"education" | "certifications" | null>("education");
 
   return (
     <section id="education" className="py-20">
@@ -90,7 +90,7 @@ export default function Education() {
                 accentClass="text-neonBlue"
                 isOpen={openPanel === "education"}
                 onClick={() => setOpenPanel((current) => (
-                  current === "education" ? "certifications" : "education"
+                  current === "education" ? null : "education"
                 ))}
               />
               <AnimatePresence initial={false}>
@@ -158,7 +158,7 @@ export default function Education() {
                 accentClass="text-neonPink"
                 isOpen={openPanel === "certifications"}
                 onClick={() => setOpenPanel((current) => (
-                  current === "certifications" ? "education" : "certifications"
+                  current === "certifications" ? null : "certifications"
                 ))}
               />
               <AnimatePresence initial={false}>

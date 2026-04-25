@@ -27,5 +27,12 @@ describe("Education section", () => {
       "true"
     );
     expect(screen.queryByText(/coursework:/i)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Certifications" }));
+
+    expect(screen.getByRole("button", { name: "Certifications" })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
   });
 });
